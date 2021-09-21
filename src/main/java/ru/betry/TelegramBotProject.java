@@ -19,6 +19,7 @@ public class TelegramBotProject {
 
     public void run() {
         bot.setUpdatesListener(updates -> {
+            System.out.println(updates);
             updates.forEach(it -> {
                 bot.execute(
                     new SendMessage(it.message().chat().id(),

@@ -1,6 +1,5 @@
 package ru.betry;
 
-
 enum BotType{
     Telegram,
     YandexAlise
@@ -27,11 +26,11 @@ public class BotLogic {
             case ("help"):
                 return TelegramHelp;
             default:
-                return "Unknown Command";
+                return "Unknown command";
         }
     }
 
-    private String getSimpleMessage(String userMessage){
+    private String getSimpleMessage(String userMessage){ //вынести логику обычных сообщений
         return getEchoMessage(userMessage); //пока так
     }
 
