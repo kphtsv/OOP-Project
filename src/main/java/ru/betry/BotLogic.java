@@ -6,7 +6,7 @@ enum BotType{
 }
 
 public class BotLogic {
-    private static String TelegramHelp = "It's a simple bot. Just have fun!";  //написать нормальную справку
+    private static final String TelegramHelp = "It's a simple bot. Just have fun!";  //написать нормальную справку
 
     public String getAnswerForUser(String userMessage, BotType type) {
         switch (type) {

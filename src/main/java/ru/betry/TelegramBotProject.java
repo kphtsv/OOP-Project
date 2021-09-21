@@ -6,13 +6,21 @@ import com.pengrad.telegrambot.request.SendMessage;
 
 public class TelegramBotProject {
 
-    private static final String TOKEN = "1965393172:AAEk3ECo5L7pP87xiaUzJ0eUVSO9_36MSHs";
-    private static final String USERNAME = "just_easly_bot";
+    private static String TOKEN = "1965393172:AAEk3ECo5L7pP87xiaUzJ0eUVSO9_36MSHs";
+    private static String USERNAME = "just_easly_bot";
     private TelegramBot bot;
     private BotLogic logic;
 
     public TelegramBotProject()
     {
+        bot = new TelegramBot(TOKEN);
+        logic = new BotLogic();
+    }
+
+    public TelegramBotProject(String TOKEN, String USERNAME)
+    {
+        this.TOKEN = TOKEN;
+        this.USERNAME = USERNAME;
         bot = new TelegramBot(TOKEN);
         logic = new BotLogic();
     }
