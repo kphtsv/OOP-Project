@@ -1,1 +1,1 @@
-web: java -jar gradle\wrapper\gradle-wrapper.jar
+web: java -jar build/libs/gradle-getting-started-1.0.jar
