@@ -21,7 +21,7 @@ public class ParserToBotCore {
         core = new BotCore();
     }
 
-    public String getAnswerForUser(String userId, String userMessage, BotType type) {
+    public String[] getAnswerForUser(String userId, String userMessage, BotType type) {
         CoreMessageType messageType = parseMessageType(userMessage, type);
 
         switch (messageType) {
