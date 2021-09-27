@@ -31,19 +31,15 @@ public class TelegramBotProject {
         bot.setUpdatesListener(updates -> {
             System.out.println(updates);
             updates.forEach(it -> {
-
                 String[] messages = logic.getAnswerForUser(
                         "Telegram" + it.message().chat().id().toString(),
                         it.message().text(), BotType.Telegram);
 
-                for (String message : messages) {
-                    bot.execute(
-                            new SendMessage(it.message().chat().id(),
-                                    message));
-                }
+                for (String message : messages)
+                    bot.execute(new SendMessage(it.message().chat().id(), message));
             });
+
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
-            //com
         });
     }
 }
