@@ -43,6 +43,7 @@ public class TelegramBotProject {
                 }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
+            //com
         });
     }
 }
