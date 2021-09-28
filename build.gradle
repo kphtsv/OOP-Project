@@ -14,8 +14,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0'
     implementation 'com.github.pengrad:java-telegram-bot-api:5.2.0'
 }
 
@@ -25,4 +25,10 @@ test {
 
 application {
     mainClass = 'ru.betry.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.betry.Main'
+    }
 }
