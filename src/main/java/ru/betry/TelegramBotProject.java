@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 
 import java.util.Arrays;
 
+//todo:
 public class TelegramBotProject {
 
     private static String TOKEN = "1965393172:AAEk3ECo5L7pP87xiaUzJ0eUVSO9_36MSHs";
