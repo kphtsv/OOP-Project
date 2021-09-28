@@ -16,11 +16,11 @@ public class BotCore {
     }
 
     public String[] getSimpleMessage(String userId, String userMessage) {
-        return getEchoMessage(userMessage); //написать сущность обработчика
+        return getEchoMessage(userMessage); //todo написать сущность обработчика
     }
 
     public String[] getRestart() {
-        //потереть бд
+        //todo потереть бд
         return new String[] {"Bot restarted.", help};
     }
 
