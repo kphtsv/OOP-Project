@@ -23,8 +23,6 @@ test {
     useJUnitPlatform()
 }
 
-heroku {
-    appName = "schedule-bot-oop2021"
-    jdkVersion = 16
-
+application {
+    mainClass = 'ru.betry.Main'
 }
