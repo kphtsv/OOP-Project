@@ -4,9 +4,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.SendMessage;
 
-import java.util.Arrays;
 
-public class TelegramBotProject {
+public class TelegramBotProject implements IBotClass {
 
     private static String TOKEN = "1965393172:AAEk3ECo5L7pP87xiaUzJ0eUVSO9_36MSHs";
     private static String USERNAME = "just_easly_bot";
@@ -31,9 +30,13 @@ public class TelegramBotProject {
         bot.setUpdatesListener(updates -> {
             System.out.println(updates);
             updates.forEach(it -> {
-                String[] messages = logic.getAnswerForUser(
-                        "Telegram" + it.message().chat().id().toString(),
-                        it.message().text(), BotType.Telegram);
+
+                ChatInfoClass chatInfo = new ChatInfoClass(
+                        it.message().chat().id().toString(),
+                        it.message().text(),
+                        BotType.Telegram);
+
+                String[] messages = logic.getAnswerForUser(chatInfo);
 
                 for (String message : messages)
                     bot.execute(new SendMessage(it.message().chat().id(), message));

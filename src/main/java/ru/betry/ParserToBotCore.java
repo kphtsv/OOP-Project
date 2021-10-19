@@ -21,8 +21,8 @@ public class ParserToBotCore {
         core = new BotCore();
     }
 
-    public String[] getAnswerForUser(String userId, String userMessage, BotType type) {
-        CoreMessageType messageType = parseMessageType(userMessage, type);
+    public String[] getAnswerForUser(ChatInfoClass chatInfo) {
+        CoreMessageType messageType = parseMessageType(chatInfo.getUserMessage(), chatInfo.getBotType());
 
         switch (messageType) {
             case help:
@@ -30,9 +30,9 @@ public class ParserToBotCore {
             case unknown:
                 return core.getUnknownCommand();
             case simple:
-                return core.getSimpleMessage(userId, userMessage);
+                return core.getSimpleMessage(chatInfo);
             case restart:
-                return core.getRestart();
+                return core.getRestart(chatInfo);
             default:
                 return core.getNotSupportedType();
         }
