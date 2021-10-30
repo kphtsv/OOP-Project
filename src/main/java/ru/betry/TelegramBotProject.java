@@ -5,10 +5,11 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.SendMessage;
 
 
-public class TelegramBotProject implements IBotClass {
+//todo:
+public class TelegramBotProject {
 
-    private static String TOKEN = "1965393172:AAEk3ECo5L7pP87xiaUzJ0eUVSO9_36MSHs";
-    private static String USERNAME = "just_easly_bot";
+    private static String TOKEN = "2047247271:AAHVSjz9DwVwHcNJG2BkqqPUZVAPYIoHUuQ";
+    private static String USERNAME = "javaoop2021bot";
     private TelegramBot bot;
     private ParserToBotCore logic;
 
@@ -34,12 +35,14 @@ public class TelegramBotProject implements IBotClass {
                 ChatInfoClass chatInfo = new ChatInfoClass(
                         it.message().chat().id().toString(),
                         it.message().text(),
-                        BotType.Telegram);
+                        BotType.Telegram,
+                        it.message().chat().username());
 
                 String[] messages = logic.getAnswerForUser(chatInfo);
 
                 for (String message : messages)
                     bot.execute(new SendMessage(it.message().chat().id(), message));
+                chatInfo.updateToDataBase();
             });
 
             return UpdatesListener.CONFIRMED_UPDATES_ALL;

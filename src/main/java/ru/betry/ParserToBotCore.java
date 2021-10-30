@@ -8,9 +8,11 @@ enum BotType {
 enum CoreMessageType {
     help,
     unknown,
-    simple,
+    notCommandMessage,
     notSupportedType,
-    restart
+    restart,
+    changeGroup,
+    getSchedule
 }
 
 public class ParserToBotCore {
@@ -23,19 +25,17 @@ public class ParserToBotCore {
 
     public String[] getAnswerForUser(ChatInfoClass chatInfo) {
         CoreMessageType messageType = parseMessageType(chatInfo.getUserMessage(), chatInfo.getBotType());
+        chatInfo.updateFromDataBase();
 
-        switch (messageType) {
-            case help:
-                return core.getHelp();
-            case unknown:
-                return core.getUnknownCommand();
-            case simple:
-                return core.getSimpleMessage(chatInfo);
-            case restart:
-                return core.getRestart(chatInfo);
-            default:
-                return core.getNotSupportedType();
-        }
+        return switch (messageType) {
+            case help -> core.getHelp();
+            case unknown -> core.getUnknownCommand();
+            case notCommandMessage -> core.getNotCommandMessage(chatInfo);
+            case restart -> core.getRestart(chatInfo);
+            case changeGroup -> core.getChangeGroup(chatInfo);
+            case getSchedule -> core.getSchedule(chatInfo);
+            default -> core.getNotSupportedType();
+        };
     }
 
     private CoreMessageType parseMessageType(String userMessage, BotType type) {
@@ -44,7 +44,7 @@ public class ParserToBotCore {
                 if (userMessage.startsWith("/"))
                     return getTelegramCommand(userMessage);
                 else
-                    return CoreMessageType.simple;
+                    return CoreMessageType.notCommandMessage;
             }
             default:
                 return CoreMessageType.notSupportedType;
@@ -52,11 +52,16 @@ public class ParserToBotCore {
     }
 
     private CoreMessageType getTelegramCommand(String userCommand){
+        //незабудь обновить и getAnswerForUser
         switch (userCommand) {
             case ("/help"):
                 return CoreMessageType.help;
             case ("/restart"):
                 return CoreMessageType.restart;
+            case ("/change_group"):
+                return CoreMessageType.changeGroup;
+            case ("/get_my_schedule"):
+                return CoreMessageType.getSchedule;
             default:
                 return CoreMessageType.unknown;
         }
