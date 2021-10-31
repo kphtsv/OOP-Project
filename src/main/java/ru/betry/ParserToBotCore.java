@@ -17,7 +17,7 @@ enum CoreMessageType {
 
 public class ParserToBotCore {
 
-    private BotCore core;
+    private final BotCore core;
 
     public ParserToBotCore(){
         core = new BotCore();
@@ -53,17 +53,12 @@ public class ParserToBotCore {
 
     private CoreMessageType getTelegramCommand(String userCommand){
         //незабудь обновить и getAnswerForUser
-        switch (userCommand) {
-            case ("/help"):
-                return CoreMessageType.help;
-            case ("/restart"):
-                return CoreMessageType.restart;
-            case ("/change_group"):
-                return CoreMessageType.changeGroup;
-            case ("/get_my_schedule"):
-                return CoreMessageType.getSchedule;
-            default:
-                return CoreMessageType.unknown;
-        }
+        return switch (userCommand) {
+            case ("/help") -> CoreMessageType.help;
+            case ("/restart") -> CoreMessageType.restart;
+            case ("/change_group") -> CoreMessageType.changeGroup;
+            case ("/get_my_schedule") -> CoreMessageType.getSchedule;
+            default -> CoreMessageType.unknown;
+        };
     }
 }
