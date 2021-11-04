@@ -36,4 +36,15 @@ public class Weekday {
 
         return new Weekday(name, date, classes);
     }
+
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        sb.append(String.format("**%s, %s:**", name, date));
+        for (var classInfo: classes) {
+            sb.append("\n");
+            sb.append(classInfo);
+        }
+        return sb.toString();
+    }
 }
