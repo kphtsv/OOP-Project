@@ -1,6 +1,7 @@
 package ru.betry.urfuSchedule;
 
-import ru.betry.Weekday;
+import ru.betry.urfuSchedule.models.ClassInfo;
+import ru.betry.urfuSchedule.models.Weekday;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,10 +10,18 @@ import java.util.regex.Pattern;
 public class UrfuScheduleParser {
     private static final Pattern weeklyTableRE;
     private static final Pattern weekdayRawRE;
+    private static final Pattern weekdayDateInfoRE;
+    private static final Pattern weekdayClassesRE;
+    private static final Pattern classInfoRE;
+    private static final Pattern extraInfoRe;
 
     static {
         weeklyTableRE = Pattern.compile("(?s)<table class=\"shedule-group-table\">.*?</table>");
         weekdayRawRE = Pattern.compile("(?s)<tr class=\"divide\">.*?<tr class=\"divide\">.*?</tr>");
+        weekdayDateInfoRE = Pattern.compile("(?s)<b>(?<date>.*?)</b>.*?weekday-name\">[ |\\n]*(?<weekdayName>.*?)[ |\\n]*</");
+        weekdayClassesRE = Pattern.compile("(?s)<tr class=\"shedule-weekday-row\">.*?</tr>");
+        classInfoRE = Pattern.compile("(?s)<td class=\"shedule-weekday-time\">(?<time>.*?)</td>.*?<dd>[ |\\n]*(?<order>\\d)\\.[ |\\n]*(?<name>.*?)[ |\\n]*</dd>*.*?<dt>(?<extraInfo>.*?)</dt>");
+        extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
     }
 
     public static String getScheduleTableContent(String pageContent) throws IOException {
@@ -29,9 +38,53 @@ public class UrfuScheduleParser {
 
         while (matcher.find() && weeklySchedule.size() < daysAhead) {
             var weekdayInfoRaw = matcher.group(0);
-            weeklySchedule.add(Weekday.Create(weekdayInfoRaw));
+            weeklySchedule.add(extractWeekday(weekdayInfoRaw));
         }
 
         return weeklySchedule;
+    }
+
+    public static Weekday extractWeekday(String weekdayInfoRaw) {
+        var matcher = weekdayDateInfoRE.matcher(weekdayInfoRaw);
+        String name = null;
+        String date = null;
+
+        if (matcher.find()) {
+            name = matcher.group("weekdayName");
+            date = matcher.group("date");
+        }
+
+        var classes = new ArrayList<ClassInfo>();
+        matcher = weekdayClassesRE.matcher(weekdayInfoRaw);
+        while (matcher.find()) {
+            var classInfoRaw = matcher.group(0);
+            classes.add(extractClass(classInfoRaw));
+        }
+
+        return new Weekday(name, date, classes);
+    }
+
+    public static ClassInfo extractClass(String rawInfo) {
+        var matcher = classInfoRE.matcher(rawInfo);
+        if (matcher.find()) {
+            var order = matcher.group("order");
+            var time = matcher.group("time");
+            var name = matcher.group("name");
+            var extraInfo = formatRawExtraClassInfo(matcher.group("extraInfo"));
+
+            return new ClassInfo(order, time, name, extraInfo);
+        }
+        else
+            return null;
+    }
+
+    private static String formatRawExtraClassInfo(String rawExtraInfo) {
+        var matcher = extraInfoRe.matcher(rawExtraInfo);
+        var result = new StringBuilder();
+        while (matcher.find()) {
+            result.append(matcher.group(1));
+            result.append(". ");
+        }
+        return result.toString();
     }
 }

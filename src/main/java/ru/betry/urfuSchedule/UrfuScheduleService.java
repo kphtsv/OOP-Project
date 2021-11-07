@@ -1,18 +1,14 @@
 package ru.betry.urfuSchedule;
 
-import ru.betry.Weekday;
+import ru.betry.urfuSchedule.models.Weekday;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class UrfuScheduleService {
     public static class InvalidGroupException extends Exception {
-        public InvalidGroupException(String errorMessage) {
-            super(errorMessage);
-        }
+        public InvalidGroupException(String errorMessage) { super(errorMessage); }
     }
 
     /**
@@ -25,11 +21,7 @@ public class UrfuScheduleService {
 
     // достаём данные из таблицы
     public static ArrayList<Weekday> getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
-        var schedulePageContent = UrfuScheduleApi.getPageContent(UrfuScheduleApi.getScheduleUrl(group, date));
-        BufferedWriter writer = new BufferedWriter(new FileWriter("asdas", true));
-        writer.write(schedulePageContent);
-        writer.close();
-
+        var schedulePageContent = UrfuScheduleApi.getSchedulePageContent(group, date);
         var tableContent = UrfuScheduleParser.getScheduleTableContent(schedulePageContent);
 
         return UrfuScheduleParser.extractSchedule(tableContent, daysAhead);

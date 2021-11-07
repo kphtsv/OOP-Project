@@ -1,7 +1,7 @@
 package ru.betry.urfuSchedule;
 
 import com.google.gson.GsonBuilder;
-import ru.betry.IdQueryResponse;
+import ru.betry.urfuSchedule.models.IdQueryResponse;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -34,11 +34,11 @@ public class UrfuScheduleApi {
         return content;
     }
 
-    public static URL getQueryURL(String group) throws MalformedURLException {
+    private static URL getQueryURL(String group) throws MalformedURLException {
         return new URL(ID_QUERY_URL + URLEncoder.encode(group, StandardCharsets.UTF_8));
     }
 
-    public static int getGroupId(String group) throws IOException, UrfuScheduleService.InvalidGroupException {
+    private static int getGroupId(String group) throws IOException, UrfuScheduleService.InvalidGroupException {
         var idQueryResponse = getPageContent(getQueryURL(group));
 
         var gson = new GsonBuilder().setPrettyPrinting().create();
@@ -50,11 +50,14 @@ public class UrfuScheduleApi {
         return response.suggestions.get(0).data;
     }
 
-    public static URL getScheduleUrl(String group, Date date) throws IOException, UrfuScheduleService.InvalidGroupException {
+    private static URL getScheduleUrl(String group, Date date) throws IOException, UrfuScheduleService.InvalidGroupException {
         var id = UrfuScheduleApi.getGroupId(group);
         var dateFormatted = new SimpleDateFormat("yyyyMMdd").format(date);
-        // System.out.println(dateFormatted);
 
         return new URL(SCHEDULE_URL + id + "/" + dateFormatted + "/");
+    }
+
+    public static String getSchedulePageContent(String group, Date date) throws UrfuScheduleService.InvalidGroupException, IOException {
+        return getPageContent(getScheduleUrl(group, date));
     }
 }

@@ -1,4 +1,4 @@
-package ru.betry;
+package ru.betry.urfuSchedule.models;
 
 import java.util.ArrayList;
 
