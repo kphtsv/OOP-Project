@@ -16,10 +16,9 @@ public class UrfuScheduleService {
      * @param group группа в формате МЕН-хххххх
      * @param date дата
      * @param daysAhead на сколько дней вперёд нужно вернуть расписание
-     * @return расписание на неделю, которая включает в себя дату date
+     * @return расписание на daysAhead дней, начиная с date
      */
 
-    // достаём данные из таблицы
     public static ArrayList<Weekday> getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
         var schedulePageContent = UrfuScheduleApi.getSchedulePageContent(group, date);
         var tableContent = UrfuScheduleParser.getScheduleTableContent(schedulePageContent);

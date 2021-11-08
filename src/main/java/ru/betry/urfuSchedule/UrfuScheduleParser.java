@@ -25,7 +25,6 @@ public class UrfuScheduleParser {
     }
 
     public static String getScheduleTableContent(String pageContent) throws IOException {
-
         var matcher = weeklyTableRE.matcher(pageContent);
         if (!matcher.find())
             throw new IOException();
