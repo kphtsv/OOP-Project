@@ -1,5 +1,9 @@
 package ru.betry;
 
+import ru.betry.urfuSchedule.UrfuScheduleService;
+
+import java.io.IOException;
+
 enum BotType {
     Telegram,
     YandexAlice

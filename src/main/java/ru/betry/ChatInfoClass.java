@@ -68,8 +68,13 @@ public class ChatInfoClass implements IChatInfo {
 
     public void updateFromDataBase(){
         Document doc = mongoDB.getItemForId(chatId);
-        setStudyGroup(doc.get("StudyGroup").toString());
-        setState(doc.get("State").toString());
+        if (doc == null) {
+            setStudyGroup("None");
+            setState("New");
+        } else {
+            setStudyGroup(doc.get("StudyGroup").toString());
+            setState(doc.get("State").toString());
+        }
     }
 
     public void updateToDataBase(){

@@ -4,6 +4,9 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.SendMessage;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 
 //todo:
 public class TelegramBotProject {
@@ -41,7 +44,9 @@ public class TelegramBotProject {
                 String[] messages = logic.getAnswerForUser(chatInfo);
 
                 for (String message : messages)
-                    bot.execute(new SendMessage(it.message().chat().id(), message));
+
+                    bot.execute(new SendMessage(it.message().chat().id(),
+                            new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8)));
                 chatInfo.updateToDataBase();
             });
 

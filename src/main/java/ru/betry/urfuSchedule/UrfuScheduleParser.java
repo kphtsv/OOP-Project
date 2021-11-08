@@ -32,16 +32,16 @@ public class UrfuScheduleParser {
         return matcher.group(0);
     }
 
-    public static ArrayList<Weekday> extractSchedule(String tableContent, int daysAhead) {
+    public static String[] extractSchedule(String tableContent, int daysAhead) {
         var matcher = weekdayRawRE.matcher(tableContent);
-        var weeklySchedule = new ArrayList<Weekday>();
+        var weeklySchedule = new ArrayList<String>();
 
         while (matcher.find() && weeklySchedule.size() < daysAhead) {
             var weekdayInfoRaw = matcher.group(0);
-            weeklySchedule.add(extractWeekday(weekdayInfoRaw));
+            weeklySchedule.add(extractWeekday(weekdayInfoRaw).toString());
         }
 
-        return weeklySchedule;
+        return weeklySchedule.toArray(new String[0]);
     }
 
     public static Weekday extractWeekday(String weekdayInfoRaw) {

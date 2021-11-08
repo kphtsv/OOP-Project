@@ -1,9 +1,6 @@
 package ru.betry.urfuSchedule;
 
-import ru.betry.urfuSchedule.models.Weekday;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class UrfuScheduleService {
@@ -20,7 +17,7 @@ public class UrfuScheduleService {
      */
 
     // достаём данные из таблицы
-    public static ArrayList<Weekday> getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
+    public static String[] getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
         var schedulePageContent = UrfuScheduleApi.getSchedulePageContent(group, date);
         var tableContent = UrfuScheduleParser.getScheduleTableContent(schedulePageContent);
 

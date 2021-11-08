@@ -1,4 +1,4 @@
-package ru.betry;
+package ru.betry.urfuSchedule;
 
 public class MathMech {
     private final static String[] AUDIENCES = {"601", "605", "607", "609", "611", "613", "615", "617", "621", "623",

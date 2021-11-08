@@ -21,6 +21,15 @@ public class UrfuScheduleApi {
         SCHEDULE_URL = "https://urfu.ru/api/schedule/groups/lessons/";
     }
 
+    public static boolean isGroupCorrect(String group) {
+        try {
+            getGroupId(group);
+            return true;
+        } catch (UrfuScheduleService.InvalidGroupException | IOException e) {
+            return false;
+        }
+    }
+
     public static String getPageContent(URL url) throws IOException {
         var connection = url.openConnection();
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
