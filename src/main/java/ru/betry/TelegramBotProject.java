@@ -2,6 +2,7 @@ package ru.betry;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 
 import java.nio.charset.Charset;
@@ -46,7 +47,8 @@ public class TelegramBotProject {
                 for (String message : messages)
 
                     bot.execute(new SendMessage(it.message().chat().id(),
-                            new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8)));
+                            new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
+                            .parseMode(ParseMode.Markdown));
                 chatInfo.updateToDataBase();
             });
 

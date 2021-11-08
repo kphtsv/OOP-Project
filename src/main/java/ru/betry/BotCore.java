@@ -25,7 +25,7 @@ public class BotCore {
 
     public String[] getNotCommandMessage(ChatInfoClass chatInfo) {
         if (Objects.equals(chatInfo.getState(), "ready")) {
-            return getEchoMessage("Ваше сообщение: " + chatInfo.getUserMessage());
+            return getEchoMessage("Ваше сообщение: " + "_" + chatInfo.getUserMessage() + "_");
         } else {
             return getSetGroup(chatInfo);
         }

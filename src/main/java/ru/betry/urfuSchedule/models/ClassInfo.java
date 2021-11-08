@@ -6,7 +6,7 @@ public class ClassInfo {
     public String name;
     public String extraInfo;
 
-    private final static String TO_STRING_FORMAT_TEMPLATE = "__%s. %s (%s)__\n%s";
+    private final static String TO_STRING_FORMAT_TEMPLATE = "_%s. %s (%s)_\n%s";
 
     public ClassInfo(String order, String time, String name, String extraInfo) {
         this.order = order;
