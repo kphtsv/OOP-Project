@@ -81,9 +81,10 @@ public class UrfuScheduleParser {
     private static String formatRawExtraClassInfo(String rawExtraInfo) {
         var matcher = extraInfoRe.matcher(rawExtraInfo);
         var result = new StringBuilder();
+        result.append("   ");
         while (matcher.find()) {
             result.append(matcher.group(1));
-            result.append(". ");
+            result.append("\n   ");
         }
         return result.toString();
     }

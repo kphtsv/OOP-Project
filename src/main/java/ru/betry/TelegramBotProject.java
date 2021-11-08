@@ -2,7 +2,10 @@ package ru.betry;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 
 import java.nio.charset.Charset;
@@ -44,11 +47,17 @@ public class TelegramBotProject {
 
                 String[] messages = logic.getAnswerForUser(chatInfo);
 
+                Keyboard replyKey = new ReplyKeyboardMarkup(
+                        new KeyboardButton("/get_my_schedule")
+                ).resizeKeyboard(true);
+
+
                 for (String message : messages)
 
                     bot.execute(new SendMessage(it.message().chat().id(),
                             new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
-                            .parseMode(ParseMode.Markdown));
+                            .parseMode(ParseMode.Markdown)
+                            .replyMarkup(replyKey));
                 chatInfo.updateToDataBase();
             });
 
