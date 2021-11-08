@@ -62,8 +62,8 @@ public class ChatInfoClass implements IChatInfo {
 
 
     public void restartChat(){
-        studyGroup = "None";
-        state = "new";
+        setStudyGroup("None");
+        setState("new");
     }
 
     public void updateFromDataBase(){
@@ -73,7 +73,6 @@ public class ChatInfoClass implements IChatInfo {
     }
 
     public void updateToDataBase(){
-        //todo написть обновление в базу данных
         mongoDB.insertItem(MakeDocument());
     }
 

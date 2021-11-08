@@ -1,8 +1,5 @@
 package ru.betry;
 
-//todo: реализовать ввод группы и состояния
-
-import java.util.Arrays;
 import java.util.Objects;
 
 public class BotCore {
@@ -72,7 +69,7 @@ public class BotCore {
         return new String[] {message};
     }
 
-    private boolean isGroupCorrect(String group){
+    private boolean isGroupCorrect(String group) {
         //todo: написать сверку с существующими группами
         return true;
     }
