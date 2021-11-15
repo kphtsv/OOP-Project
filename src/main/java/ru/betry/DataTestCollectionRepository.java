@@ -6,8 +6,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-
-import javax.print.Doc;
 import java.util.HashMap;
 
 public class DataTestCollectionRepository implements IRepository {
