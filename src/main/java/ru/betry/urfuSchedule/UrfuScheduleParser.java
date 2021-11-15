@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class UrfuScheduleParser {
+public class UrfuScheduleParser implements IScheduleParser {
     private static final Pattern weeklyTableRE;
     private static final Pattern weekdayRawRE;
     private static final Pattern weekdayDateInfoRE;
@@ -24,7 +24,7 @@ public class UrfuScheduleParser {
         extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
     }
 
-    public static String getScheduleTableContent(String pageContent) throws IOException {
+    public String getScheduleTableContent(String pageContent) throws IOException {
 
         var matcher = weeklyTableRE.matcher(pageContent);
         if (!matcher.find())
@@ -32,7 +32,8 @@ public class UrfuScheduleParser {
         return matcher.group(0);
     }
 
-    public static String[] extractSchedule(String tableContent, int daysAhead) {
+    public String[] extractSchedule(String schedulePageContent, int daysAhead) throws IOException {
+        var tableContent = getScheduleTableContent(schedulePageContent);
         var matcher = weekdayRawRE.matcher(tableContent);
         var weeklySchedule = new ArrayList<String>();
 
@@ -44,7 +45,7 @@ public class UrfuScheduleParser {
         return weeklySchedule.toArray(new String[0]);
     }
 
-    public static Weekday extractWeekday(String weekdayInfoRaw) {
+    public Weekday extractWeekday(String weekdayInfoRaw) {
         var matcher = weekdayDateInfoRE.matcher(weekdayInfoRaw);
         String name = null;
         String date = null;
@@ -64,7 +65,7 @@ public class UrfuScheduleParser {
         return new Weekday(name, date, classes);
     }
 
-    public static ClassInfo extractClass(String rawInfo) {
+    public ClassInfo extractClass(String rawInfo) {
         var matcher = classInfoRE.matcher(rawInfo);
         if (matcher.find()) {
             var order = matcher.group("order");
@@ -78,7 +79,7 @@ public class UrfuScheduleParser {
             return null;
     }
 
-    private static String formatRawExtraClassInfo(String rawExtraInfo) {
+    private String formatRawExtraClassInfo(String rawExtraInfo) {
         var matcher = extraInfoRe.matcher(rawExtraInfo);
         var result = new StringBuilder();
         result.append("   ");

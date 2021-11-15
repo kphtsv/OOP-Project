@@ -8,6 +8,14 @@ public class UrfuScheduleService {
         public InvalidGroupException(String errorMessage) { super(errorMessage); }
     }
 
+    public IUrfuAPI api;
+    private final IScheduleParser parser;
+
+    public UrfuScheduleService() {
+        api = new UrfuScheduleApi();
+        parser = new UrfuScheduleParser();
+    }
+
     /**
      * Принимает на вход группу и дату, возвращает расписание на некоторое кол-во дней вперёд.
      * @param group группа в формате МЕН-хххххх
@@ -17,10 +25,9 @@ public class UrfuScheduleService {
      */
 
     // достаём данные из таблицы
-    public static String[] getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
-        var schedulePageContent = UrfuScheduleApi.getSchedulePageContent(group, date);
-        var tableContent = UrfuScheduleParser.getScheduleTableContent(schedulePageContent);
+    public String[] getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
+        var schedulePageContent = api.getSchedulePageContent(group, date);
 
-        return UrfuScheduleParser.extractSchedule(tableContent, daysAhead);
+        return parser.extractSchedule(schedulePageContent, daysAhead);
     }
 }

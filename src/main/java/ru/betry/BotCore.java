@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Objects;
 
 public class BotCore {
+    private final UrfuScheduleService service = new UrfuScheduleService();
+
     private static final String helpEng = "It's a simple bot. Just have fun!";
     private static final String help = "Справка:\n  Этот бот написан для удобного доступа к расписанию УрФУ";
     //todo: дописать справку
@@ -47,7 +49,7 @@ public class BotCore {
             var group = chatInfo.getStudyGroup();
             String[] schedule = new String[0];
             try {
-                schedule = UrfuScheduleService.getScheduleByGroup(group, new Date(), 1);
+                schedule = service.getScheduleByGroup(group, new Date(), 1);
             } catch (UrfuScheduleService.InvalidGroupException e) {
                 System.out.println("Такого не должно было быть, но группа неверная");
             } catch (IOException e) {
@@ -67,7 +69,7 @@ public class BotCore {
                 return new String[]{"Пожалуйста введите свою учебную группу в формате МЕН-******"};
             }
             case "groupRequest": {
-                if (UrfuScheduleApi.isGroupCorrect(chatInfo.getUserMessage())) {
+                if (service.api.isGroupCorrect(chatInfo.getUserMessage())) {
                     chatInfo.setStudyGroup(chatInfo.getUserMessage());
                     chatInfo.setState("ready");
                     return new String[] {"Группа успешно выбрана"};
