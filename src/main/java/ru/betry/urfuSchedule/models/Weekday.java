@@ -14,7 +14,7 @@ public class Weekday {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // todo незачем вызывать каждый раз у неизменяемых
         var sb = new StringBuilder();
         sb.append(String.format("**%s, %s:**", name, date));
         for (var classInfo: classes) {

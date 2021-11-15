@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class UrfuScheduleParser {
+public class UrfuScheduleParser implements IScheduleParser { // rename SimpleParser
     private static final Pattern weeklyTableRE;
     private static final Pattern weekdayRawRE;
     private static final Pattern weekdayDateInfoRE;
@@ -24,14 +24,23 @@ public class UrfuScheduleParser {
         extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
     }
 
+<<<<<<< Updated upstream
     public static String getScheduleTableContent(String pageContent) throws IOException {
+=======
+    private String getScheduleTableContent(String pageContent) throws IOException {
+>>>>>>> Stashed changes
         var matcher = weeklyTableRE.matcher(pageContent);
         if (!matcher.find())
             throw new IOException();
         return matcher.group(0);
     }
 
+<<<<<<< Updated upstream
     public static ArrayList<Weekday> extractSchedule(String tableContent, int daysAhead) {
+=======
+    public String[] extractSchedule(String pageContent, int daysAhead) throws IOException {
+        var tableContent = getScheduleTableContent(pageContent);
+>>>>>>> Stashed changes
         var matcher = weekdayRawRE.matcher(tableContent);
         var weeklySchedule = new ArrayList<Weekday>();
 
@@ -43,7 +52,7 @@ public class UrfuScheduleParser {
         return weeklySchedule;
     }
 
-    public static Weekday extractWeekday(String weekdayInfoRaw) {
+    private Weekday extractWeekday(String weekdayInfoRaw) {
         var matcher = weekdayDateInfoRE.matcher(weekdayInfoRaw);
         String name = null;
         String date = null;
@@ -57,13 +66,13 @@ public class UrfuScheduleParser {
         matcher = weekdayClassesRE.matcher(weekdayInfoRaw);
         while (matcher.find()) {
             var classInfoRaw = matcher.group(0);
-            classes.add(extractClass(classInfoRaw));
+            classes.add(extractClassInfo(classInfoRaw));
         }
 
         return new Weekday(name, date, classes);
     }
 
-    public static ClassInfo extractClass(String rawInfo) {
+    private ClassInfo extractClassInfo(String rawInfo) {
         var matcher = classInfoRE.matcher(rawInfo);
         if (matcher.find()) {
             var order = matcher.group("order");
@@ -77,7 +86,7 @@ public class UrfuScheduleParser {
             return null;
     }
 
-    private static String formatRawExtraClassInfo(String rawExtraInfo) {
+    private String formatRawExtraClassInfo(String rawExtraInfo) {
         var matcher = extraInfoRe.matcher(rawExtraInfo);
         var result = new StringBuilder();
         while (matcher.find()) {

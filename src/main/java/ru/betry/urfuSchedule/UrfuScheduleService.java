@@ -7,6 +7,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class UrfuScheduleService {
+
+    public final IUrfuAPI api;
+    private final IScheduleParser parser;
+
+    public UrfuScheduleService() {
+        this.api = new UrfuScheduleApi();
+        this.parser = new UrfuScheduleParser();
+    }
+
     public static class InvalidGroupException extends Exception {
         public InvalidGroupException(String errorMessage) { super(errorMessage); }
     }
@@ -19,10 +28,17 @@ public class UrfuScheduleService {
      * @return расписание на daysAhead дней, начиная с date
      */
 
+<<<<<<< Updated upstream
     public static ArrayList<Weekday> getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
         var schedulePageContent = UrfuScheduleApi.getSchedulePageContent(group, date);
         var tableContent = UrfuScheduleParser.getScheduleTableContent(schedulePageContent);
 
         return UrfuScheduleParser.extractSchedule(tableContent, daysAhead);
+=======
+    // достаём данные из таблицы
+    public String[] getScheduleByGroup(String group, Date date, int daysAhead) throws InvalidGroupException, IOException {
+        var schedulePageContent = api.getSchedulePageContent(group, date);
+        return parser.extractSchedule(schedulePageContent, daysAhead);
+>>>>>>> Stashed changes
     }
 }
