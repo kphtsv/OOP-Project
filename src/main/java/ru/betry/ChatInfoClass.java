@@ -12,7 +12,6 @@ public class ChatInfoClass implements IChatInfo {
     private static BotType botType;
     private static String userName;
     private static String state;
-    private final MongoDB mongoDB = new MongoDB();
 
     public ChatInfoClass(String chatId, String userMessage, BotType botType) {
         ChatInfoClass.chatId = chatId;
@@ -66,8 +65,7 @@ public class ChatInfoClass implements IChatInfo {
         setState("new");
     }
 
-    public void updateFromDataBase(){
-        Document doc = mongoDB.getItemForId(chatId);
+    public void update(Document doc){
         if (doc == null) {
             setStudyGroup("None");
             setState("New");
@@ -77,11 +75,8 @@ public class ChatInfoClass implements IChatInfo {
         }
     }
 
-    public void updateToDataBase(){
-        mongoDB.insertItem(MakeDocument());
-    }
 
-    private Document MakeDocument() {
+    Document makeDocument() {
         Document doc = new Document()
                 .append("_id", chatId)
                 .append("State", state)

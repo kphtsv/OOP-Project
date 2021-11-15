@@ -29,7 +29,6 @@ public class ParserToBotCore {
 
     public String[] getAnswerForUser(ChatInfoClass chatInfo) {
         CoreMessageType messageType = parseMessageType(chatInfo.getUserMessage(), chatInfo.getBotType());
-        chatInfo.updateFromDataBase();
 
         return switch (messageType) {
             case help -> core.getHelp();

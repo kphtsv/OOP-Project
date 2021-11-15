@@ -12,18 +12,19 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 
-//todo:
 public class TelegramBotProject {
 
     private static String TOKEN = "2047247271:AAHVSjz9DwVwHcNJG2BkqqPUZVAPYIoHUuQ";
     private static String USERNAME = "javaoop2021bot";
     private TelegramBot bot;
     private ParserToBotCore logic;
+    private DataTestCollectionRepository dataTestCollectionRepository;
 
     public TelegramBotProject()
     {
         bot = new TelegramBot(TOKEN);
         logic = new ParserToBotCore();
+        dataTestCollectionRepository = new DataTestCollectionRepository();
     }
 
     public TelegramBotProject(String TOKEN, String USERNAME)
@@ -32,6 +33,7 @@ public class TelegramBotProject {
         this.USERNAME = USERNAME;
         bot = new TelegramBot(TOKEN);
         logic = new ParserToBotCore();
+        dataTestCollectionRepository = new DataTestCollectionRepository();
     }
 
     public void run() {
@@ -44,6 +46,8 @@ public class TelegramBotProject {
                         it.message().text(),
                         BotType.Telegram,
                         it.message().chat().username());
+                chatInfo.update(dataTestCollectionRepository.getItem(chatInfo.getChatId()));
+
 
                 String[] messages = logic.getAnswerForUser(chatInfo);
 
@@ -58,7 +62,8 @@ public class TelegramBotProject {
                             new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
                             .parseMode(ParseMode.Markdown)
                             .replyMarkup(replyKey));
-                chatInfo.updateToDataBase();
+
+                dataTestCollectionRepository.checkAndPush(chatInfo.makeDocument());
             });
 
             return UpdatesListener.CONFIRMED_UPDATES_ALL;

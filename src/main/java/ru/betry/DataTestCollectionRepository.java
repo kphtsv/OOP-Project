@@ -7,33 +7,54 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import javax.print.Doc;
+import java.util.HashMap;
 
-public class MongoDB {
+public class DataTestCollectionRepository implements IRepository {
+    private HashMap<String, Document> cash;
     private static final String MongoURI = "mongodb+srv://root:yaneznauyparol@cluster0.rqcxk.mongodb.net/test";
     private MongoClient mongoClient;
     private MongoDatabase database;
     private MongoCollection<Document> collection;
 
-    public MongoDB() {
+    DataTestCollectionRepository () {
         java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.SEVERE);
         mongoClient = new MongoClient(new MongoClientURI(MongoURI));
         database = mongoClient.getDatabase("data");
         collection = database.getCollection("test");
+        cash = new HashMap<String, Document>();
     }
 
-    public Document getItemForId(String id) {
+    public Document getItem (String id) {
+        if (cash.containsKey(id))   {
+            return cash.get(id);
+        }
         Bson field = new Document("_id", id);
-        return collection.find(field).first();
+        Document doc =  collection.find(field).first();
+        cash.put(id, doc);
+        return doc;
     }
 
-    public void insertItem(Document doc) {
+    public void checkAndPush(Document doc) {
         String id = doc.get("_id").toString();
-        if (getItemForId(id) == null) {
+        if (!cash.containsKey(id)) {
+            putItem(doc);
+        } else {
+            if (doc != cash.get(id)) {
+                putItem(doc);
+            }
+        }
+    }
+
+    private void putItem(Document doc) {
+        String id = doc.get("_id").toString();
+        if (getItem(id) == null) {
             collection.insertOne(doc);
         } else {
             Bson filter = new Document("_id", id);
             Bson updateDoc = new Document("$set", doc);
             collection.updateOne(filter, updateDoc);
         }
+        cash.put(id, doc);
     }
 }
