@@ -3,7 +3,6 @@ package ru.betry;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -43,7 +42,9 @@ public class TelegramBotProject {
 
                 ChatInfoClass chatInfo = new ChatInfoClass(
                         it.message().chat().id().toString(),
-                        it.message().text(),
+                        //it.message().text(),
+                        new String(it.message().text().getBytes(StandardCharsets.UTF_8),
+                                Charset.forName("cp1251")),
                         BotType.Telegram,
                         it.message().chat().username());
                 chatInfo.update(dataTestCollectionRepository.getItem(chatInfo.getChatId()));
@@ -51,17 +52,20 @@ public class TelegramBotProject {
 
                 String[] messages = logic.getAnswerForUser(chatInfo);
 
-                Keyboard replyKey = new ReplyKeyboardMarkup(
-                        new KeyboardButton("/get_my_schedule")
-                ).resizeKeyboard(true);
+                String[][] Buttons = {
+                        {"Расписание"},
+                        {"Расписание на завтра", "Расписание на неделю"},
+                        {"Свободные кабинеты"}
+                };
+                Keyboard replyKey = new ReplyKeyboardMarkup(Buttons).resizeKeyboard(true);
 
 
                 for (String message : messages)
 
                     bot.execute(new SendMessage(it.message().chat().id(),
-                            new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
-                            .parseMode(ParseMode.Markdown)
-                            .replyMarkup(replyKey));
+                        new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
+                        .parseMode(ParseMode.Markdown)
+                        .replyMarkup(replyKey));
 
                 dataTestCollectionRepository.checkAndPush(chatInfo.makeDocument());
             });

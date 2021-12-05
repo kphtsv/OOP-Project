@@ -59,7 +59,6 @@ public class ChatInfoClass implements IChatInfo {
     public void setState(String state) {ChatInfoClass.state = state;}
 
 
-
     public void restartChat(){
         setStudyGroup("None");
         setState("new");

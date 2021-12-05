@@ -16,7 +16,10 @@ enum CoreMessageType {
     notSupportedType,
     restart,
     changeGroup,
-    getSchedule
+    getSchedule,
+    getWeekSchedule,
+    getTomorrowSchedule,
+    getFreeRooms
 }
 
 public class ParserToBotCore {
@@ -37,6 +40,9 @@ public class ParserToBotCore {
             case restart -> core.getRestart(chatInfo);
             case changeGroup -> core.getChangeGroup(chatInfo);
             case getSchedule -> core.getSchedule(chatInfo);
+            case getTomorrowSchedule -> core.getTomorrowSchedule(chatInfo);
+            case getWeekSchedule -> core.getWeekSchedule(chatInfo);
+            case getFreeRooms -> core.getFreeRooms(chatInfo);
             default -> core.getNotSupportedType();
         };
     }
@@ -47,20 +53,30 @@ public class ParserToBotCore {
                 if (userMessage.startsWith("/"))
                     return getTelegramCommand(userMessage);
                 else
-                    return CoreMessageType.notCommandMessage;
+                    return getTextCommand(userMessage);
             }
             default:
                 return CoreMessageType.notSupportedType;
         }
     }
 
+    private CoreMessageType getTextCommand(String userMessage) {
+        //не забудь обновить и getAnswerForUser
+        return switch (userMessage) {
+            case ("Расписание") -> CoreMessageType.getSchedule;
+            case ("Расписание на завтра") -> CoreMessageType.getTomorrowSchedule;
+            case ("Расписание на неделю") -> CoreMessageType.getWeekSchedule;
+            case ("Свободные кабинеты") -> CoreMessageType.getFreeRooms;
+            default -> CoreMessageType.notCommandMessage;
+        };
+    }
+
     private CoreMessageType getTelegramCommand(String userCommand){
-        //незабудь обновить и getAnswerForUser
+        //не забудь обновить и getAnswerForUser
         return switch (userCommand) {
-            case ("/help") -> CoreMessageType.help;
+            case ("/start"), ("/help") -> CoreMessageType.help;
             case ("/restart") -> CoreMessageType.restart;
             case ("/change_group") -> CoreMessageType.changeGroup;
-            case ("/get_my_schedule") -> CoreMessageType.getSchedule;
             default -> CoreMessageType.unknown;
         };
     }

@@ -62,6 +62,18 @@ public class BotCore {
         }
     }
 
+    public String[] getFreeRooms(ChatInfoClass chatInfo) {
+        return new String[] {"Пока нет"};
+    }
+
+    public String[] getTomorrowSchedule(ChatInfoClass chatInfo) {
+        return new String[] {"Пока нет"};
+    }
+
+    public String[] getWeekSchedule(ChatInfoClass chatInfo) {
+        return new String[] {"Пока нет"};
+    }
+
     private String[] getSetGroup(ChatInfoClass chatInfo) {
         switch (chatInfo.getState()) {
             case "new": {
