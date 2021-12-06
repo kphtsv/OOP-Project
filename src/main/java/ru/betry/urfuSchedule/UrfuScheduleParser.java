@@ -4,6 +4,7 @@ import ru.betry.urfuSchedule.models.ClassInfo;
 import ru.betry.urfuSchedule.models.Weekday;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,7 @@ public class UrfuScheduleParser implements IScheduleParser {
     private static final Pattern weekdayClassesRE;
     private static final Pattern classInfoRE;
     private static final Pattern extraInfoRe;
+    private static final Pattern cabinetRE;
 
     static {
         weeklyTableRE = Pattern.compile("(?s)<table class=\"shedule-group-table\">.*?</table>");
@@ -22,6 +24,7 @@ public class UrfuScheduleParser implements IScheduleParser {
         weekdayClassesRE = Pattern.compile("(?s)<tr class=\"shedule-weekday-row\">.*?</tr>");
         classInfoRE = Pattern.compile("(?s)<td class=\"shedule-weekday-time\">(?<time>.*?)</td>.*?<dd>[ |\\n]*(?<order>\\d)\\.[ |\\n]*(?<name>.*?)[ |\\n]*</dd>*.*?<dt>(?<extraInfo>.*?)</dt>");
         extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
+        cabinetRE = Pattern.compile("[0-9]{3}\\D?");
     }
 
     public String getScheduleTableContent(String pageContent) throws IOException {
@@ -32,20 +35,30 @@ public class UrfuScheduleParser implements IScheduleParser {
         return matcher.group(0);
     }
 
-    public String[] extractSchedule(String schedulePageContent, int daysAhead) throws IOException {
+    public String[] extractFormattedSchedule(String schedulePageContent, int daysAhead) throws IOException {
+        // TODO костыль, можно сделать изящнее?
+        var schedule = extractSchedule(schedulePageContent, daysAhead);
+        var result = new String[schedule.length];
+        for (var i = 0; i < schedule.length; i++) {
+            result[i] = schedule[i].toString();
+        }
+        return result;
+    }
+
+    public Weekday[] extractSchedule(String schedulePageContent, int daysAhead) throws IOException {
         var tableContent = getScheduleTableContent(schedulePageContent);
         var matcher = weekdayRawRE.matcher(tableContent);
-        var weeklySchedule = new ArrayList<String>();
+        var weeklySchedule = new ArrayList<Weekday>();
 
         while (matcher.find() && weeklySchedule.size() < daysAhead) {
             var weekdayInfoRaw = matcher.group(0);
-            weeklySchedule.add(extractWeekday(weekdayInfoRaw).toString());
+            weeklySchedule.add(extractWeekday(weekdayInfoRaw));
         }
 
-        return weeklySchedule.toArray(new String[0]);
+        return weeklySchedule.toArray(new Weekday[0]);
     }
 
-    public Weekday extractWeekday(String weekdayInfoRaw) {
+    private Weekday extractWeekday(String weekdayInfoRaw) {
         var matcher = weekdayDateInfoRE.matcher(weekdayInfoRaw);
         String name = null;
         String date = null;
@@ -65,7 +78,7 @@ public class UrfuScheduleParser implements IScheduleParser {
         return new Weekday(name, date, classes);
     }
 
-    public ClassInfo extractClass(String rawInfo) {
+    private ClassInfo extractClass(String rawInfo) {
         var matcher = classInfoRE.matcher(rawInfo);
         if (matcher.find()) {
             var order = matcher.group("order");
@@ -88,5 +101,10 @@ public class UrfuScheduleParser implements IScheduleParser {
             result.append("\n   ");
         }
         return result.toString();
+    }
+
+    public String extractCabinet(String extraInfo) {
+        var matcher = cabinetRE.matcher(extraInfo);
+        return matcher.find() ? matcher.group(0) : null;
     }
 }
