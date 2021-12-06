@@ -44,12 +44,12 @@ public class BotCore {
         return getSetGroup(chatInfo);
     }
 
-    public String[] getSchedule(ChatInfoClass chatInfo) {
+    private String[] getSchedule(ChatInfoClass chatInfo, Date date, int daysAhead) {
         if (Objects.equals(chatInfo.getState(), "ready")) {
             var group = chatInfo.getStudyGroup();
             String[] schedule = new String[0];
             try {
-                schedule = service.getScheduleByGroup(group, new Date(), 1);
+                schedule = service.getScheduleByGroup(group, date, daysAhead);
             } catch (UrfuScheduleService.InvalidGroupException e) {
                 System.out.println("Такого не должно было быть, но группа неверная");
             } catch (IOException e) {
@@ -62,16 +62,20 @@ public class BotCore {
         }
     }
 
-    public String[] getFreeRooms(ChatInfoClass chatInfo) {
-        return new String[] {"Пока нет"};
+    public String[] getFreeRooms(ChatInfoClass chatInfo, Date date) {
+        return new String[] {service.getFormattedCabinets(date)};
     }
 
     public String[] getTomorrowSchedule(ChatInfoClass chatInfo) {
-        return new String[] {"Пока нет"};
+        return new String[] {getSchedule(chatInfo, new Date(), 2)[1]};
     }
 
     public String[] getWeekSchedule(ChatInfoClass chatInfo) {
-        return new String[] {"Пока нет"};
+        return getSchedule(chatInfo, new Date(), 7);
+    }
+
+    public String[] getTodaySchedule(ChatInfoClass chatInfo) {
+        return getSchedule(chatInfo, new Date(), 1);
     }
 
     private String[] getSetGroup(ChatInfoClass chatInfo) {

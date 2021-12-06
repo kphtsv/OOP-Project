@@ -18,8 +18,7 @@ public class UrfuScheduleService {
     public UrfuScheduleService() {
         api = new UrfuScheduleApi();
         parser = new UrfuScheduleParser();
-         mathMech = new MathMech();
-         System.out.println(mathMech.groups);
+        mathMech = new MathMech();
     }
 
     /**
@@ -79,7 +78,7 @@ public class UrfuScheduleService {
         return getCabinets(new Date(), 7);
     }
 
-    public String[] getFreeCabinets(Date date) {
+    private String[] getFreeCabinets(Date date) {
         // var unused = getAllDynamicCabinets();
         var unused = MathMech.getClonedAudiences();
         var usedToday = getCabinets(date, 1);
@@ -89,5 +88,10 @@ public class UrfuScheduleService {
         }
 
         return unused.toArray(new String[0]);
+    }
+
+    public String getFormattedCabinets(Date date) {
+        var cabinets = getFreeCabinets(date);
+        return String.join(", ", cabinets);
     }
 }

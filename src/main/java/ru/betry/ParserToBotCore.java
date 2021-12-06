@@ -3,6 +3,7 @@ package ru.betry;
 import ru.betry.urfuSchedule.UrfuScheduleService;
 
 import java.io.IOException;
+import java.util.Date;
 
 enum BotType {
     Telegram,
@@ -39,10 +40,10 @@ public class ParserToBotCore {
             case notCommandMessage -> core.getNotCommandMessage(chatInfo);
             case restart -> core.getRestart(chatInfo);
             case changeGroup -> core.getChangeGroup(chatInfo);
-            case getSchedule -> core.getSchedule(chatInfo);
+            case getSchedule -> core.getTodaySchedule(chatInfo);
             case getTomorrowSchedule -> core.getTomorrowSchedule(chatInfo);
             case getWeekSchedule -> core.getWeekSchedule(chatInfo);
-            case getFreeRooms -> core.getFreeRooms(chatInfo);
+            case getFreeRooms -> core.getFreeRooms(chatInfo, new Date());
             default -> core.getNotSupportedType();
         };
     }

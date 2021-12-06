@@ -24,7 +24,7 @@ public class UrfuScheduleParser implements IScheduleParser {
         weekdayClassesRE = Pattern.compile("(?s)<tr class=\"shedule-weekday-row\">.*?</tr>");
         classInfoRE = Pattern.compile("(?s)<td class=\"shedule-weekday-time\">(?<time>.*?)</td>.*?<dd>[ |\\n]*(?<order>\\d)\\.[ |\\n]*(?<name>.*?)[ |\\n]*</dd>*.*?<dt>(?<extraInfo>.*?)</dt>");
         extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
-        cabinetRE = Pattern.compile("[0-9]{3}\\D?");
+        cabinetRE = Pattern.compile("[0-9]{3}[à-ÿ]?");
     }
 
     public String getScheduleTableContent(String pageContent) throws IOException {

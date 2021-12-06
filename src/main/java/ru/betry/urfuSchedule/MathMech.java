@@ -1,5 +1,7 @@
 package ru.betry.urfuSchedule;
 
+import ru.betry.GroupsResources;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,23 +25,7 @@ public class MathMech {
 
     // TODO пофиксить проблему с нахождением файла
     private void initializeGroups() {
-        try {
-//            var a = Paths.get(".").toAbsolutePath();
-//            System.out.println(a);
-            // TODO как бы это ни было тупо, я не могу разобраться с тем, как прочитать файл, ибо Java его не видит
-            // а ещё почему-то текущая директория всегда ведет только до папки с проектом
-            var directory = "src\\main\\java\\ru\\betry\\urfuSchedule\\";
-
-            for (var line : Files.readAllLines(Paths.get("groups.txt"))) {
-                var info = line.split(" ");
-                var urfuNotion = info[0];
-                var mmNotion = info[1]; // пока что не должно использоваться
-
-                groups.put(mmNotion, urfuNotion);
-            }
-        } catch (IOException e) { // если не читаются строки в файле
-            e.printStackTrace();
-        }
+        groups = new GroupsResources().groups;
     }
 
 //    private void initializeCabinets() {
