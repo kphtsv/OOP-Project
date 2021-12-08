@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,11 +32,12 @@ public class UrfuScheduleApi implements IUrfuAPI {
     }
 
     public String getPageContent(URL url) throws IOException {
+        //System.out.println(url);
         var connection = url.openConnection();
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
         connection.connect();
 
-        var scanner = new Scanner(connection.getInputStream());
+        var scanner = new Scanner(connection.getInputStream(), Charset.forName("cp1251"));
         scanner.useDelimiter("\\Z");
         var content = scanner.next();
         scanner.close();

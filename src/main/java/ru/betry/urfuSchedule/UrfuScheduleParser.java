@@ -24,7 +24,7 @@ public class UrfuScheduleParser implements IScheduleParser {
         weekdayClassesRE = Pattern.compile("(?s)<tr class=\"shedule-weekday-row\">.*?</tr>");
         classInfoRE = Pattern.compile("(?s)<td class=\"shedule-weekday-time\">(?<time>.*?)</td>.*?<dd>[ |\\n]*(?<order>\\d)\\.[ |\\n]*(?<name>.*?)[ |\\n]*</dd>*.*?<dt>(?<extraInfo>.*?)</dt>");
         extraInfoRe = Pattern.compile("(?s)<span class=\"teacher\">(.*?)</");
-        cabinetRE = Pattern.compile("[0-9]{3}[à-ÿ]?");
+        cabinetRE = Pattern.compile("[0-9]{3}[Ð°-Ñ]?");
     }
 
     public String getScheduleTableContent(String pageContent) throws IOException {
@@ -36,7 +36,7 @@ public class UrfuScheduleParser implements IScheduleParser {
     }
 
     public String[] extractFormattedSchedule(String schedulePageContent, int daysAhead) throws IOException {
-        // TODO êîñòûëü, ìîæíî ñäåëàòü èçÿùíåå?
+        // TODO ÐºÐ¾ÑÑ‚Ñ‹Ð»ÑŒ, Ð¼Ð¾Ð¶Ð½Ð¾ ÑÐ´ÐµÐ»Ð°Ñ‚ÑŒ Ð¸Ð·ÑÑ‰Ð½ÐµÐµ?
         var schedule = extractSchedule(schedulePageContent, daysAhead);
         var result = new String[schedule.length];
         for (var i = 0; i < schedule.length; i++) {

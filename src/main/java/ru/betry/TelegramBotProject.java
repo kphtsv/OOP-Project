@@ -9,6 +9,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 
 public class TelegramBotProject {
@@ -39,12 +40,11 @@ public class TelegramBotProject {
         bot.setUpdatesListener(updates -> {
             System.out.println(updates);
             updates.forEach(it -> {
-
                 ChatInfoClass chatInfo = new ChatInfoClass(
                         it.message().chat().id().toString(),
                         //it.message().text(),
                         new String(it.message().text().getBytes(StandardCharsets.UTF_8),
-                                Charset.forName("cp1251")),
+                               Charset.forName("cp1251")),
                         BotType.Telegram,
                         it.message().chat().username());
                 chatInfo.update(dataTestCollectionRepository.getItem(chatInfo.getChatId()));
@@ -60,13 +60,15 @@ public class TelegramBotProject {
                 Keyboard replyKey = new ReplyKeyboardMarkup(Buttons).resizeKeyboard(true);
 
 
-                for (String message : messages)
-
+                for (String message : messages) {
+                    String z = new String(new byte[] {-48, -96, -17, -65, -67}, StandardCharsets.UTF_8);
+                    String t = message.replaceAll(z, "=");
                     bot.execute(new SendMessage(it.message().chat().id(),
-                        new String(message.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
-                        .parseMode(ParseMode.Markdown)
-                        .replyMarkup(replyKey));
-
+                            (new String(t.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
+                                    .replace('=', (char)1048))
+                            .parseMode(ParseMode.Markdown)
+                            .replyMarkup(replyKey));
+                }
                 dataTestCollectionRepository.checkAndPush(chatInfo.makeDocument());
             });
 
