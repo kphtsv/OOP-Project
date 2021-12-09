@@ -7,18 +7,7 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args)
     {
-
-        ///*
         TelegramBotProject myTelegramBot = new TelegramBotProject();
         myTelegramBot.run();
-        //*/
-        /*
-        char t = 'A';
-        for (int i = 0; i < 135; i++) {
-            t++;
-            System.out.println(t);
-        }
-        System.out.println();
-        */
     }
 }

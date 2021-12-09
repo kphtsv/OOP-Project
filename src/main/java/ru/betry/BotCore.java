@@ -1,6 +1,5 @@
 package ru.betry;
 
-import ru.betry.urfuSchedule.UrfuScheduleApi;
 import ru.betry.urfuSchedule.UrfuScheduleService;
 
 import java.io.IOException;
@@ -63,7 +62,7 @@ public class BotCore {
     }
 
     public String[] getFreeRooms(ChatInfoClass chatInfo, Date date) {
-        return new String[] {service.getFormattedCabinets(date)};
+        return new String[] {service.getFreeCabinetsFormatted(date)};
     }
 
     public String[] getTomorrowSchedule(ChatInfoClass chatInfo) {
