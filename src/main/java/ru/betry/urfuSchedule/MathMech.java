@@ -88,22 +88,24 @@ public class MathMech {
         return unused;
     }
 
-    // нет учёта порядка при выведении order
-    // выводит только те order, в которых кто-то занимался в аудитории
-
     public String getFreeCabinetsFormatted(Date date) {
         var unused = getFreeCabinets(date);
         var message = new StringBuilder();
         message.append("*Свободные кабинеты*");
 
-        for (var order : unused.keySet()) {
+        for (var i = 1; i <= 8; i++) {
+            Integer order = i;
             message.append("\n\n");
-
-            var cabinets = unused.get(order).toArray(new String[0]);
-            Arrays.sort(cabinets);
-
             message.append("_Пара №").append(order).append(":_ \n");
-            message.append(String.join(", ", cabinets));
+
+            if (unused.containsKey(order)) {
+                var cabinets = unused.get(order).toArray(new String[0]);
+                Arrays.sort(cabinets);
+                message.append(String.join(", ", cabinets));
+            }
+            else {
+                message.append("Все кабинеты свободны.");
+            }
         }
 
         return message.toString();
