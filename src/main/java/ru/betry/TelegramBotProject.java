@@ -61,10 +61,10 @@ public class TelegramBotProject {
 
 
                 for (String message : messages) {
-                    String z = new String(new byte[] {-48, -96, -17, -65, -67}, StandardCharsets.UTF_8);
-                    String t = message.replaceAll(z, "=");
+                    String errorWord = new String(new byte[] {-48, -96, -17, -65, -67}, StandardCharsets.UTF_8);
+                    String tmp = message.replaceAll(errorWord, "=");
                     bot.execute(new SendMessage(it.message().chat().id(),
-                            (new String(t.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
+                            (new String(tmp.getBytes(Charset.forName("cp1251")), StandardCharsets.UTF_8))
                                     .replace('=', (char)1048))
                             .parseMode(ParseMode.Markdown)
                             .replyMarkup(replyKey));
